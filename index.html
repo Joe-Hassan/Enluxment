@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enluxment — Digital Transformation & AI Integration</title>
+  <meta name="description" content="Enluxment builds the web applications and AI systems that modernize how enterprises operate, compete, and grow.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@600;700&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080B14;
+      --violet:       #7C3AED;
+      --cyan:         #06B6D4;
+      --text-primary: #F0F4FF;
+      --text-muted:   #8B9EC5;
+      --border:       rgba(124,58,237,0.25);
+      --glow:         rgba(124,58,237,0.35);
+      --white:          #ffffff;
+      --glow-intense:   rgba(124,58,237,0.6);
+      --violet-subtle:  rgba(124,58,237,0.08);
+      --primary-faint:  rgba(240,244,255,0.15);
+      --serif:        'Space Grotesk', system-ui, sans-serif;
+      --body:         'Inter', system-ui, sans-serif;
+      --mono:         'Space Mono', monospace;
+      --nav-bg:       rgba(8,11,20,0.75);
+      --nav-border:   rgba(124,58,237,0.2);
+      --violet-dim:   rgba(124,58,237,0.12);
+      --dot-overlay:  rgba(240,244,255,0.055);
+      --card-bg:      rgba(13,18,32,0.7);
+      --violet-hover: rgba(124,58,237,0.55);
+      --stats-bg:     rgba(13,18,32,0.5);
+      --violet-light: rgba(124,58,237,0.18);
+      --violet-glow:  rgba(124,58,237,0.45);
+      --violet-bright: rgba(124,58,237,0.4);
+      --cyan-faint:   rgba(6,182,212,0.1);
+      --cyan-dim:     rgba(6,182,212,0.18);
+      --cyan-subtle:  rgba(6,182,212,0.25);
+      --input-bg:     rgba(13,18,32,0.9);
+      --placeholder-text: rgba(139,158,197,0.45);
+      --input-focus-ring: rgba(124,58,237,0.15);
+      --footer-border: rgba(124,58,237,0.15);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section { padding: 6rem 0; }
+
+    .label {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-headline {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      color: var(--text-primary);
+      margin-bottom: 3rem;
+      line-height: 1.15;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Shared button styles */
+    .btn-primary {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      color: var(--white);
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      box-shadow: 0 0 20px var(--glow);
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 40px var(--glow-intense);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      border: 1px solid var(--primary-faint);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--violet);
+      background: var(--violet-subtle);
+    }
+
+    /* ── Navigation ── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    #nav.scrolled { border-color: var(--nav-border); }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.4rem;
+      text-decoration: none;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-family: var(--body);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta {
+      padding: 0.45rem 1.25rem;
+      border-radius: 6px;
+      border: 1px solid var(--violet) !important;
+      color: var(--text-primary) !important;
+      transition: background 0.2s, box-shadow 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--violet-dim) !important;
+      box-shadow: 0 0 16px var(--glow) !important;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding-top: 72px;
+    }
+
+    .aurora {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.4;
+      animation: float 9s ease-in-out infinite alternate;
+    }
+    .blob-violet {
+      width: 620px; height: 620px;
+      background: var(--violet);
+      top: -140px; left: -160px;
+      animation-delay: 0s;
+    }
+    .blob-cyan {
+      width: 500px; height: 500px;
+      background: var(--cyan);
+      bottom: -120px; right: -80px;
+      animation-delay: -4.5s;
+    }
+    @keyframes float {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(50px, 30px) scale(1.1); }
+    }
+
+    .dot-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--dot-overlay) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding-top: 3rem;
+      padding-bottom: 5rem;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+
+    #hero h1 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(2.6rem, 5.5vw, 4.25rem);
+      line-height: 1.08;
+      color: var(--text-primary);
+      margin-bottom: 1.75rem;
+      max-width: 720px;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 560px;
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Services ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px var(--glow);
+      border-color: var(--violet-hover);
+    }
+
+    .card-icon {
+      width: 48px; height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--violet-dim);
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      color: var(--cyan);
+    }
+    .card-icon svg {
+      width: 22px; height: 22px;
+    }
+
+    .card h3 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Why Enluxment ── */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      padding: 3rem 2rem;
+      background: var(--stats-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+
+    .stat-num {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 2.75rem;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 52px;
+      background: var(--border);
+    }
+
+    .differentiators {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    .differentiators p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    .differentiators strong {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-copy .label { margin-bottom: 1rem; }
+
+    .about-headline {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 1.75rem;
+    }
+
+    .about-copy p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .about-copy p:last-child { margin-bottom: 0; }
+
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orb {
+      position: relative;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, var(--violet-light) 0%, transparent 65%);
+      border: 1.5px solid var(--violet-glow);
+      box-shadow:
+        0 0 50px var(--violet-glow),
+        0 0 100px var(--cyan-faint),
+        inset 0 0 40px var(--violet-subtle);
+      animation: orb-pulse 5s ease-in-out infinite;
+    }
+    @keyframes orb-pulse {
+      0%, 100% { box-shadow: 0 0 50px var(--violet-glow), 0 0 100px var(--cyan-faint), inset 0 0 40px var(--violet-subtle); }
+      50%       { box-shadow: 0 0 80px var(--violet-bright),  0 0 140px var(--cyan-dim), inset 0 0 40px var(--violet-subtle); }
+    }
+
+    .orb-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .orb-ring-1 {
+      width: 190px; height: 190px;
+      border-color: var(--cyan-subtle);
+    }
+    .orb-ring-2 {
+      width: 120px; height: 120px;
+      border-color: var(--violet-dim);
+    }
+
+    /* ── Contact ── */
+    .contact-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .contact-intro {
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 2.75rem;
+    }
+
+    .contact-form { text-align: left; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group { margin-bottom: 1.25rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-family: var(--body);
+      font-size: 0.93rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group textarea {
+      resize: vertical;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--placeholder-text); }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px var(--input-focus-ring);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      margin-top: 0.25rem;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--white);
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--glow);
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 1.75rem;
+    }
+    .btn-submit:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px var(--violet-hover);
+    }
+
+    .contact-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+    .meta-dot { opacity: 0.4; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--footer-border);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 1.75rem;
+    }
+    .footer-nav a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--text-primary); }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      opacity: 0.55;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .nav-links { gap: 1rem; }
+      .nav-links a:not(.nav-cta) { display: none; }
+
+      #hero h1 { font-size: 2.25rem; }
+      .hero-btns { flex-direction: column; }
+      .btn-primary, .btn-ghost { text-align: center; }
+
+      .services-grid { grid-template-columns: 1fr; }
+
+      .stats-bar { gap: 1.5rem; padding: 2rem 1.25rem; }
+      .stat-divider { display: none; }
+      .differentiators { grid-template-columns: 1fr; gap: 1.5rem; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-visual { display: none; }
+
+      .form-row { grid-template-columns: 1fr; }
+
+      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+      .footer-nav { justify-content: center; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav id="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a class="logo" href="#hero">Enluxment</a>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="nav-cta">Get in Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="aurora">
+      <div class="blob blob-violet"></div>
+      <div class="blob blob-cyan"></div>
+    </div>
+    <div class="dot-grid"></div>
+    <div class="container hero-content">
+      <p class="eyebrow">// DIGITAL TRANSFORMATION</p>
+      <h1>Transform Your Enterprise<br>with Intelligent Technology.</h1>
+      <p class="hero-sub">Enluxment builds the web applications and AI systems that modernize how enterprises operate, compete, and grow.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-primary">Start a Project</a>
+        <a href="#services" class="btn-ghost">Explore Services</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="section">
+    <div class="container reveal">
+      <span class="label">// WHAT WE DO</span>
+      <h2 class="section-headline">End-to-End Digital Capabilities</h2>
+      <div class="services-grid">
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+              <path d="M7 8h2M11 8h6"/>
+              <path d="M7 11.5h4M13 11.5h4"/>
+            </svg>
+          </div>
+          <h3>Custom Web App Development</h3>
+          <p>We architect and build scalable, performant web applications tailored to your operational workflows and growth trajectory.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+            </svg>
+          </div>
+          <h3>AI Integration &amp; Automation</h3>
+          <p>From intelligent document processing to predictive analytics, we embed AI into your existing systems to unlock measurable efficiency gains.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20A14.5 14.5 0 0 0 12 2"/>
+              <path d="M2 12h20"/>
+            </svg>
+          </div>
+          <h3>Digital Strategy Consulting</h3>
+          <p>We assess your current technology landscape and define a clear, phased roadmap to digital maturity — aligned to business outcomes, not trends.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18"/>
+              <path d="M9 21V9"/>
+            </svg>
+          </div>
+          <h3>UI/UX Design</h3>
+          <p>Enterprise software should be powerful and intuitive. We design interfaces that reduce training overhead and improve adoption across large organizations.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="why" class="section">
+    <div class="container reveal">
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-num">50+</span>
+          <span class="stat-label">Enterprise Clients</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">8</span>
+          <span class="stat-label">Years of Delivery</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">98%</span>
+          <span class="stat-label">Client Retention</span>
+        </div>
+      </div>
+      <div class="differentiators">
+        <p><strong>Enterprise-grade delivery.</strong> We operate at the pace and precision that large organizations require — structured engagements, clear milestones, and accountability at every phase.</p>
+        <p><strong>Depth over breadth.</strong> We don't chase every technology. We specialize in web application architecture and applied AI, and we execute both with exceptional rigor.</p>
+        <p><strong>Outcomes, not outputs.</strong> Our success metric is yours. We define KPIs upfront and measure our work against them, not against ticket counts or delivery velocity.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="container reveal">
+      <div class="about-grid">
+        <div class="about-copy">
+          <span class="label">// WHO WE ARE</span>
+          <h2 class="about-headline">Built to Advance the Enterprises That Shape Industries.</h2>
+          <p>Enluxment was founded on a simple premise: enterprises deserve technology partners who operate with the same rigor they do. We don't sell retainers; we build long-term partnerships grounded in measurable results.</p>
+          <p>Our team is composed of senior engineers, applied AI researchers, and digital strategists who have delivered complex transformation programs for organizations across finance, logistics, healthcare, and manufacturing.</p>
+          <p>Every engagement begins with a thorough assessment of your current systems and a clear-eyed view of where AI and modern web infrastructure can generate the highest return. We build accordingly — never over-engineering, never cutting corners.</p>
+        </div>
+        <div class="about-visual">
+          <div class="orb">
+            <div class="orb-ring orb-ring-1"></div>
+            <div class="orb-ring orb-ring-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container reveal">
+      <div class="contact-wrap">
+        <span class="label" style="text-align:center">// START A PROJECT</span>
+        <h2 class="section-headline" style="text-align:center;margin-bottom:1rem">Let's Build Something Significant.</h2>
+        <p class="contact-intro">Tell us about your initiative. We'll respond within one business day.</p>
+        <form action="" method="post" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="company">Company</label>
+              <input type="text" id="company" name="company" placeholder="Your company">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@company.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell us about your initiative..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+        <div class="contact-meta">
+          <span>contact@enluxment.com</span>
+          <span class="meta-dot">·</span>
+          <span>Available globally · Remote-first</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-logo">Enluxment</span>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <span class="footer-copy">© 2026 Enluxment. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
