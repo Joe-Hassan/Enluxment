@@ -31,7 +31,7 @@
       --nav-bg:       rgba(8,11,20,0.75);
       --nav-border:   rgba(124,58,237,0.2);
       --violet-dim:   rgba(124,58,237,0.12);
-      --dot-overlay:  rgba(240,244,255,0.055);
+      --dot-overlay:  rgba(240,244,255,0.09);
       --card-bg:      rgba(13,18,32,0.7);
       --violet-hover: rgba(124,58,237,0.55);
       --stats-bg:     rgba(13,18,32,0.5);
@@ -51,12 +51,33 @@
 
     body {
       background: var(--bg);
-      background-image: radial-gradient(var(--dot-overlay) 1px, transparent 1px);
-      background-size: 32px 32px;
       color: var(--text-primary);
       font-family: var(--body);
       line-height: 1.6;
       overflow-x: hidden;
+    }
+
+    /* Sole grid layer: fixed + viewport-sized so its paint area is constant
+       regardless of page length, animated via transform only (GPU-composited,
+       no repaint/layout). Extended past the edges by one tile so the drift
+       never reveals a seam. */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -32px 0 0 -32px;
+      background-image: radial-gradient(var(--dot-overlay) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: -1;
+      animation: gridDrift 45s linear infinite;
+      will-change: transform;
+    }
+    @keyframes gridDrift {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(32px, 32px, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body::after { animation: none; }
     }
 
     .container {
